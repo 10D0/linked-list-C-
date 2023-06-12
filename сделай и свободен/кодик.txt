@@ -1,0 +1,506 @@
+/*(◕‿◕)*/
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Threading;
+using System.Collections;
+using System.Reflection;
+namespace сделай_и_свободен
+{
+    class Student
+    {
+        public int Index;//номер по порядку
+        public string Name;//Фамилия Имя Отчество
+        public float Mark;// Средний балл
+        public string Group;// Номер группы
+        public Student Next;// ссылка на следующий элемент 
+
+        public Student(int index, string name, float mark, string group) //конструктор
+        {
+            Index = index;
+            Name = name;
+            Mark = mark;
+            Group = group;
+        }
+    }
+    class StudentList
+    {
+        public Student Head;
+        public int index = 0;
+        public void AddStudent(string name, float mark, string group)// добавление студента
+        {
+            if (Head == null)
+            {
+                Head = new Student(index, name, mark, group);
+            }
+            else
+            {
+                Student current = Head;
+                while (current.Next != null)
+                {
+                    current = current.Next;
+                }
+                Student student = new Student(index, name, mark, group);// создание и внесение человека на последнее место
+                current.Next = student;
+            }
+            index += 1;
+        }
+        public void Num()
+        {
+
+            Student current = Head;
+            index = 0;
+            while (current != null)
+            {
+                current.Index = index;
+                index += 1;
+                current = current.Next;
+            }
+        }//перебор всего с изменением номеров по порядку
+        public void DeleteStudent(int rangeStart, int rangeEnd)// удаление студента(можно и промежутка студентов)
+        {
+            Student previousNode = null, currentNode = Head;
+            while (currentNode != null)
+            {
+                if (currentNode.Index >= rangeStart && currentNode.Index <= rangeEnd)
+                {
+                    if (previousNode == null)
+                    {
+                        currentNode = currentNode.Next;
+                    }
+                    else
+                    {
+                        previousNode.Next = currentNode.Next;
+                    }
+                }
+                else
+                {
+                    previousNode = currentNode;
+                }
+                currentNode = currentNode.Next;
+            }
+        }
+        public void OutStudent(int a, string NameOrGroup, float mark, StreamWriter txt)//вывод списка студентов + вывод отобрынных элементов(поиск)
+        {
+            Student current = Head.Next;
+            while (current != null)
+            {
+
+                Thread.Sleep(5);
+                for (int i = 0; i <= 55; i++)
+                {
+                    Console.BackgroundColor = ConsoleColor.DarkGray;
+                    Console.Write(" ");
+                    Console.SetCursorPosition(i, Console.CursorTop);
+                }
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.SetCursorPosition(0, Console.CursorTop);
+
+                switch (a)
+                {
+                    case 1:
+                        if (NameOrGroup == current.Name) // поиск по слову/группе
+                        {
+                            Console.Write($"{current.Index} ");
+                            Console.SetCursorPosition(3, Console.CursorTop);
+                            Console.Write($"{current.Name}");
+                            Console.SetCursorPosition(42, Console.CursorTop);
+                            Console.Write($"{current.Mark}");
+                            Console.SetCursorPosition(50, Console.CursorTop);
+                            Console.WriteLine($"{current.Group}");
+                            //current = current.Next;
+                        }
+                        break;
+                    case 2:
+                        if (current.Mark == mark)// поиск по оценке
+                        {
+                            Console.Write($"{current.Index} ");
+                            Console.SetCursorPosition(3, Console.CursorTop);
+                            Console.Write($"{current.Name}");
+                            Console.SetCursorPosition(42, Console.CursorTop);
+                            Console.Write($"{current.Mark}");
+                            Console.SetCursorPosition(50, Console.CursorTop);
+                            Console.WriteLine($"{current.Group}");
+                            //current = current.Next;
+                        }
+                        break;
+                    case 3:
+                        if (NameOrGroup == current.Group)// поиск по слову/группе
+                        {
+                            Console.Write($"{current.Index} ");
+                            Console.SetCursorPosition(3, Console.CursorTop);
+                            Console.Write($"{current.Name}");
+                            Console.SetCursorPosition(42, Console.CursorTop);
+                            Console.Write($"{current.Mark}");
+                            Console.SetCursorPosition(50, Console.CursorTop);
+                            Console.WriteLine($"{current.Group}");
+                            //current = current.Next;
+                        }
+                        break;
+                    case 4:
+                        //txt.Write($"{current.Index} ");
+                        txt.Write($"{current.Name}  ");
+                        txt.Write($"{current.Mark}  ");
+                        txt.WriteLine($"{current.Group}");
+                        break;
+                    default:
+                        Console.Write($"{current.Index} ");
+                        Console.SetCursorPosition(3, Console.CursorTop);
+                        Console.Write($"{current.Name}");
+                        Console.SetCursorPosition(42, Console.CursorTop);
+                        Console.Write($"{current.Mark}");
+                        Console.SetCursorPosition(50, Console.CursorTop);
+                        Console.WriteLine($"{current.Group}");
+                        break;
+                }
+                current = current.Next;
+            }
+            Console.ResetColor();
+            Console.Write(""); Console.WriteLine();
+        }
+        public void Sorting(Student Head, Student end,int a)//сортир.
+        {
+            switch (a)
+            {
+                case 1:
+                    for (int i = 0; i <= end.Index; i++)
+                    {
+                        Student current = Head.Next;
+                        while (current.Next != null)
+                        {
+                            //int b = ;
+                            if (String.Compare(current.Name, current.Next.Name)>0)
+                            {
+                                Swap(current, current.Next, Head);
+                            }
+                            if (current.Next != null)
+                                current = current.Next;
+                        }
+                    }
+                    break;
+                case 2:
+                    for (int i = 0; i <= end.Index; i++)
+                    {
+                        Student current = Head.Next;
+                        while (current.Next != null)
+                        {
+                            //int b = ;
+                            if (String.Compare(current.Name, current.Next.Name) < 0)
+                            {
+                                Swap(current, current.Next, Head);
+                            }
+                            if (current.Next != null)
+                                current = current.Next;
+                        }
+                    }
+                    break;
+                case 3:
+                    for (int i = 0; i <= end.Index; i++)
+                    {
+                        Student current = Head.Next;
+                        while (current.Next != null)
+                        {
+                            if (current.Mark > current.Next.Mark)
+                            {
+                                Swap(current, current.Next, Head);
+                            }
+                            if (current.Next != null)
+                                current = current.Next;
+                        }
+                    }
+                    break;
+                case 4:
+                    for (int i = 0; i <= end.Index; i++)
+                    {
+                        Student current = Head.Next;
+                        while (current.Next != null)
+                        {
+                            if (current.Mark < current.Next.Mark)
+                            {
+                                Swap(current, current.Next, Head);
+                            }
+                            if (current.Next != null)
+                                current = current.Next;
+                        }
+                    }
+                    break;
+                case 5:
+                    for (int i = 0; i <= end.Index; i++)
+                    {
+                        Student current = Head.Next;
+                        while (current.Next != null)
+                        {
+                            //int b = ;
+                            if (String.Compare(current.Group, current.Next.Group) < 0)
+                            {
+                                Swap(current, current.Next, Head);
+                            }
+                            if (current.Next != null)
+                                current = current.Next;
+                        }
+                    }
+                    break;
+                case 6:
+                    for (int i = 0; i <= end.Index; i++)
+                    {
+                        Student current = Head.Next;
+                        while (current.Next != null)
+                        {
+                            //int b = ;
+                            if (String.Compare(current.Group, current.Next.Group) > 0)
+                            {
+                                Swap(current, current.Next, Head);
+                            }
+                            if (current.Next != null)
+                                current = current.Next;
+                        }
+                    }
+                    break;
+            }
+        }
+        public Student Swap(Student Current, Student CurrentNext, Student head)
+        {
+            Student Previous, Previous2, next1, next2;
+            Previous = Head;
+            Previous2 = Head;
+            if (Previous == Current)
+                Previous = null;
+            else
+                while (Previous.Next != Current) // поиск узла предшествующего currnet
+                    Previous = Previous.Next;
+            if (Previous2 == CurrentNext)
+                Previous2 = null;
+            else
+                while (Previous2.Next != CurrentNext) // поиск узла предшествующего currentnext
+                    Previous2 = Previous2.Next;
+            next1 = Current.Next;  // узел следующий за current
+            next2 = CurrentNext.Next;  // узел следующий за currentnext
+            if (CurrentNext == next1)
+            {                       // обмениваются соседние узлы
+                CurrentNext.Next = Current;
+                Current.Next = next2;
+                if (Current != head)
+                    Previous.Next = CurrentNext;
+            }
+            else
+              if (Current == next2)
+            {
+                // обмениваются соседние узлы
+                Current.Next = CurrentNext;
+                CurrentNext.Next = next1;
+                if (CurrentNext != head)
+                    Previous2.Next = CurrentNext;
+            }
+            else
+            {
+                // обмениваются несоседние узлы
+                if (Current != head)
+                    Previous.Next = CurrentNext;
+                CurrentNext.Next = next1;
+                if (CurrentNext != head)
+                    Previous2.Next = Current;
+                Current.Next = next2;
+            }
+            if (Current == head)
+                return (CurrentNext);
+            if (CurrentNext == head)
+                return (Current);
+            return (head);
+        }
+    }
+    class Program
+    {
+        static void Tekstic(string text)// анимация точек
+        {
+            Console.Clear();
+            Console.Write(text);
+            for (int i = 0; i < 4; i++)
+            {
+                Console.SetCursorPosition(text.Length + 1, Console.CursorTop);
+                Console.Write($"...");
+                Thread.Sleep(200);
+                Console.SetCursorPosition(text.Length + 1, Console.CursorTop);
+                Console.Write($".. ");
+                Thread.Sleep(200);
+                Console.SetCursorPosition(text.Length + 1, Console.CursorTop);
+                Console.Write($".  ");
+                Thread.Sleep(200);
+            }
+            Console.Clear();
+        }
+        static void Main(string[] args)
+        {
+            Console.SetWindowSize(60, 63);
+            string[] lines = File.ReadAllLines(@"D:\2 курс\2 семестр\оап\сделай и свободен\список.txt");// создание строчного массива из строк txt файла
+            string[] stringSeparators = new string[] { "  " };// разделитель по двойным пробелам чтобы можно было фио нормально вывести
+            string text;
+            StudentList List = new StudentList();
+            float v = -1; int a; int mark;
+            string NameOrGroup;
+            List.AddStudent("",0,"");
+            for (int i = 0; i < lines.Length; i++)
+            {
+                string OneLine = lines[i];// выбор строки
+                string[] FormFields = OneLine.Split(stringSeparators, StringSplitOptions.None);// разделяется по двум пробелам
+                if (i != v - 1)
+                    List.AddStudent(FormFields[0], float.Parse(FormFields[1]), FormFields[2]);
+            }
+        Main:   //переход на новую попытку
+            List.OutStudent(0, "", 0, null);
+        MainCase:
+            Console.WriteLine($"Введите желаемое действие:\n1 - Сортировка...\n2 - Поиск...\n3 - изменение списка...\n4 - сохранение данных\n5 - сохранение данных в новом файле0 - закончить программу\n");
+            v = float.Parse(Console.ReadLine());
+            switch (v)
+            {
+                case 0:
+                    goto end;
+                case 1:     //Сортировка
+                TryAgainCase1:
+                    Console.Clear();
+                    List.OutStudent(0, "", 0, null);
+                MaimCase1:
+                    Student N = List.Head;
+                    while (N.Next != null)
+                        N = N.Next; //N - становится последним элементом
+                    Console.WriteLine($"Выберите сортировку:\n1 - ФИО по алфавиту\n2 - ФИО в обратном алфавитном порядке\n3 - по возрастанию среднего балла\n4 - по убыванию среднего балла\n5 - по возрастанию номера группы\n6 - по убыванию номера группы\n7 - назад\n0 - закончить программу\n");
+                    v = float.Parse(Console.ReadLine());
+                    switch (v)
+                    {
+                        case 0:
+                            goto end;
+                        case 1:
+                            List.Sorting(List.Head, N, 1);
+                            List.OutStudent(0, "", 0, null);
+                            goto MaimCase1;
+                        case 2:
+                            List.Sorting(List.Head, N, 2);
+                            List.OutStudent(0, "", 0, null);
+                            goto MaimCase1;
+                        case 3:
+                            //List.Swap(List.Head.Next.Next, List.Head.Next.Next.Next.Next, List.Head);
+                            List.Sorting(List.Head, N,3);
+                            List.OutStudent(0, "", 0, null);
+                            goto MaimCase1;
+                        case 4:
+                            List.Sorting(List.Head, N, 4);
+                            List.OutStudent(0, "", 0, null);
+                            goto MaimCase1;
+                        case 5:
+                            List.Sorting(List.Head, N, 5);
+                            List.OutStudent(0, "", 0, null);
+                            goto MaimCase1;
+                        case 6:
+                            List.Sorting(List.Head, N, 6);
+                            List.OutStudent(0, "", 0, null);
+                            goto MaimCase1;
+                        case 7:
+                            text = "Переход назад";
+                            Tekstic(text);
+                            goto Main;
+                        default:
+                            text = "Нету такого варианта, переход назад";
+                            Tekstic(text);
+                            goto TryAgainCase1;
+                    }
+                case 2:      //Поиск
+                TryAgainCase2:
+                    Console.Clear();
+                    List.OutStudent(0, "", 0, null);
+                MainCase2:
+                    Console.WriteLine($"Выберите как искать:\n1 - по ФИО\n2 - по оценке\n3 - по группе\n4 - назад\n0 - закончить программу\n");
+                    v = float.Parse(Console.ReadLine());
+                    switch (v)
+                    {
+                        case 0:
+                            goto end;
+                        case 1:
+                            Console.Clear();
+                            List.OutStudent(0, "", 0, null);
+                            Console.Write($"Введите Корректное ФИО для отбора: ");
+                            NameOrGroup = Console.ReadLine();
+                            List.OutStudent(1, NameOrGroup, 0, null);
+                            goto MainCase2;
+                        case 2:
+                            Console.Clear();
+                            List.OutStudent(0, "", 0, null);
+                            Console.Write("Введите средний балл для отбора: ");
+                            v = float.Parse(Console.ReadLine());
+                            List.OutStudent(2, "", v, null);
+                            goto MainCase2;
+                        case 3:
+                            Console.Clear();
+                            List.OutStudent(0, "", 0, null);
+                            Console.Write("Введите Корректный номер группы для отбора: ");
+                            NameOrGroup = Console.ReadLine();
+                            List.OutStudent(3, NameOrGroup, 0, null);
+                            goto MainCase2;
+                        case 4:
+                            text = "Переход назад";
+                            Tekstic(text);
+                            goto Main;
+                        default:
+                            text = "Нету такого варианта, попробуй еще";
+                            Tekstic(text);
+                            goto TryAgainCase2;
+                    }
+                case 3:      //Изменение списка
+                TryAgainCase3:
+                    Console.Clear();
+                    List.OutStudent(0, "", 0, null);
+                MainCase3:
+                    Console.WriteLine($"Выберите сортировку:\n1 - добавление нового студента\n2 - удаление студента\n3 - изменение индексов\n 4 - назад\n0 - закончить программу\n");
+                    v = int.Parse(Console.ReadLine());
+                    switch (v)
+                    {
+                        case 0:
+                            goto end;
+                        case 1:      //добавление студента
+                            Console.WriteLine("Введите данные студента");
+                            Console.Write("ФИО: "); NameOrGroup = Console.ReadLine();
+                            Console.Write("Средний балл: "); v = float.Parse(Console.ReadLine());
+                            Console.Write("Группа: "); text = Console.ReadLine();
+                            List.AddStudent(NameOrGroup, v, text); Console.WriteLine("");
+                            List.OutStudent(0, "", 0, null);
+                            goto MainCase3;
+                        case 2:      //удаление студента
+                            Console.Write("Введите индекс уничтожаемого студента:"); v = float.Parse(Console.ReadLine());
+                            List.DeleteStudent(Convert.ToInt32(v), Convert.ToInt32(v));
+                            List.OutStudent(0, "", 0, null);
+                            goto MainCase3;
+                        case 3:     //перераспределение индексов
+                            List.Num();
+                            break;
+                        case 4:
+                            text = "Переход назад";
+                            Tekstic(text);
+                            goto Main;
+                        default:
+                            text = "Нету такого варианта, попробуй еще";
+                            Tekstic(text);
+                            goto TryAgainCase3;
+                    }
+                    break;
+                case 4:     //простая перезапись предыдущего файла
+                    StreamWriter txt = new StreamWriter(@"D:\2 курс\2 семестр\оап\сделай и свободен\список.txt", false);
+                    List.OutStudent(4, "", 0, txt);
+                    txt.Close();
+                    goto MainCase;
+                case 5:     //сохранение новым файлом
+                    Console.WriteLine("Введите название нового файла: "); NameOrGroup = Console.ReadLine();
+                    txt = new StreamWriter(@"D:\2 курс\2 семестр\оап\сделай и свободен\" + NameOrGroup + ".txt", true);
+                    List.OutStudent(4, "", 0, txt);
+                    txt.Close();
+                    goto MainCase;
+                default:        //неудача снаписанием числа от 1 до 5((((
+                    text = "Нету такого варианта, переход назад";
+                    Tekstic(text);
+                    goto Main;
+            }
+            Console.Read();
+        end:;
+        }
+    }
+}
